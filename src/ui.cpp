@@ -22,7 +22,7 @@ MCParams enterValues() {
 }
 
 int getMenuChoice() {
-  string options[] = {"CALL", "PUT", "CSV Mode"};
+  string options[] = {"CALL", "PUT"};
   int selected = 0;
   int total = 3;
 
