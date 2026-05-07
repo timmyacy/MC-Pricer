@@ -5,8 +5,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 project (CSVReader)
 
 include_directories(include)
-add_executable(main main.cpp
-src/ui.cpp
+add_executable(main
+    main.cpp
+    src/ui.cpp
+    src/option_pricer.cpp
+    src/european_pricer.cpp
 )
 
 

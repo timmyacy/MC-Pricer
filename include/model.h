@@ -9,4 +9,3 @@ struct Model {
   OptionType type;
   MCParams params;
 };
-int getModelType() {}

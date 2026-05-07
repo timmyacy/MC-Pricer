@@ -1,11 +1,16 @@
+#include "european_pricer.h"
 
-#include "ui.h"
 #include <iostream>
+#include <memory>
 using namespace std;
 
 int main() {
-  int choiceOption = getMenuChoice();
-  int modelOption = getModelType();
+  MCParams params = enterValues();
+  int choice = getMenuChoice(); // 0 = CALL, 1 = PUT
+  Option option = static_cast<Option>(choice);
 
-  cout << choiceOption;
+  auto pricer = make_unique<EuropeanPricer>(params, option);
+  cout << "\nPrice: " << pricer->price() << "\n";
+
+  return 0;
 }
