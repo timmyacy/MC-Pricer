@@ -5,8 +5,9 @@
 using namespace std;
 
 int main() {
+  int choice = getMenuChoice();
   MCParams params = enterValues();
-  int choice = getMenuChoice(); // 0 = CALL, 1 = PUT
+
   Option option = static_cast<Option>(choice);
 
   auto pricer = make_unique<EuropeanPricer>(params, option);

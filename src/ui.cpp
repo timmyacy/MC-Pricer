@@ -17,7 +17,7 @@ MCParams enterValues() {
 
   cout << "Please enter a path count (N) \n";
   cin >> params.N;
-
+  cin.ignore();
   return params;
 }
 
