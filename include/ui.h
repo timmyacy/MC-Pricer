@@ -1,3 +1,6 @@
+#include <string>
+#include <vector>
+using namespace std;
 struct MCParams {
   double S;
   double K;
@@ -8,4 +11,4 @@ struct MCParams {
 };
 
 MCParams enterValues();
-int getMenuChoice();
+int selectFromMenu(const string &title, const vector<string> &options);

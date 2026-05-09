@@ -2,6 +2,7 @@ cmake_minimum_required (VERSION 3.31)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_BUILD_TYPE Debug)
 project (CSVReader)
 
 include_directories(include)
@@ -10,6 +11,7 @@ add_executable(main
     src/ui.cpp
     src/option_pricer.cpp
     src/european_pricer.cpp
+    src/binary_pricer.cpp
 )
 
 

@@ -2,6 +2,22 @@
 #include <iostream>
 
 using namespace std;
+
+#include <termios.h>
+#include <unistd.h>
+
+void setRawMode(bool enable) {
+  static struct termios oldt;
+  if (enable) {
+    struct termios newt;
+    tcgetattr(STDIN_FILENO, &oldt); // save old settings
+    newt = oldt;
+    newt.c_lflag &= ~(ICANON | ECHO); // raw, no echo
+    tcsetattr(STDIN_FILENO, TCSANOW, &newt);
+  } else {
+    tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // restore
+  }
+}
 MCParams enterValues() {
   MCParams params;
   cout << "Please enter your current price (S) \n";
@@ -21,26 +37,19 @@ MCParams enterValues() {
   return params;
 }
 
-int getMenuChoice() {
-  string options[] = {"CALL", "PUT"};
+int selectFromMenu(const string &title, const vector<string> &options) {
   int selected = 0;
-  int total = 3;
+  int total = options.size();
 
+  setRawMode(true);
   while (true) {
     cout << "\033[2J\033[H";
-    cout << "Select option type (use arrow keys, enter to confirm):\n\n";
-
+    cout << title << "\n\n";
     for (int i = 0; i < total; i++) {
-      if (i == selected)
-        cout << " > " << options[i] << "\n";
-      else
-        cout << "   " << options[i] << "\n";
+      cout << (i == selected ? " > " : "   ") << options[i] << "\n";
     }
 
-    system("stty raw -echo");
     char c = getchar();
-    system("stty cooked echo");
-
     if (c == '\033') {
       getchar();
       char arrow = getchar();
@@ -52,6 +61,6 @@ int getMenuChoice() {
     if (c == '\n' || c == '\r')
       break;
   }
-
+  setRawMode(false);
   return selected;
 }
