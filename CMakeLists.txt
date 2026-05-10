@@ -12,6 +12,9 @@ add_executable(main
     src/option_pricer.cpp
     src/european_pricer.cpp
     src/binary_pricer.cpp
+    src/barrier_pricer.cpp
+    src/asian_pricer.cpp
+    src/lookback_pricer.cpp
 )
 
 

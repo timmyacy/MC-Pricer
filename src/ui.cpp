@@ -18,7 +18,7 @@ void setRawMode(bool enable) {
     tcsetattr(STDIN_FILENO, TCSANOW, &oldt); // restore
   }
 }
-MCParams enterValues() {
+MCParams enterValues(int optionChoice) {
   MCParams params;
   cout << "Please enter your current price (S) \n";
   cin >> params.S;
@@ -28,12 +28,10 @@ MCParams enterValues() {
   cin >> params.r;
   cout << "Please enter the volatility i.e 5%,10% (vol) \n";
   cin >> params.vol;
-  cout << "Please enter the duration in years (6 months i.e 1.5) (T) \n";
+  cout << "Please enter the duration in years (6 months i.e 0.5) (T) \n";
   cin >> params.T;
-
   cout << "Please enter a path count (N) \n";
   cin >> params.N;
-  cin.ignore();
   return params;
 }
 

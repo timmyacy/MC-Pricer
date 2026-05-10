@@ -10,5 +10,5 @@ struct MCParams {
   double N;
 };
 
-MCParams enterValues();
+MCParams enterValues(int optionChoice);
 int selectFromMenu(const string &title, const vector<string> &options);
