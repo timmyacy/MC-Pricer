@@ -15,6 +15,7 @@ add_executable(main
     src/barrier_pricer.cpp
     src/asian_pricer.cpp
     src/lookback_pricer.cpp
+    src/model.cpp
 )
 
 

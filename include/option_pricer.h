@@ -6,6 +6,7 @@ public:
   OptionPricer(const MCParams &params, Option option);
   virtual double price() = 0;
   virtual ~OptionPricer() = default;
+  Greeks computeGreeks();
 
 protected:
   MCParams params;

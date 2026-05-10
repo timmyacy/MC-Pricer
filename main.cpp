@@ -3,6 +3,8 @@
 #include "binary_pricer.h"
 #include "european_pricer.h"
 #include "lookback_pricer.h"
+#include "ui.h"
+
 #include <iostream>
 using namespace std;
 
@@ -15,14 +17,17 @@ int main() {
   Option option = static_cast<Option>(choice);
 
   string callOrPut = (choice == 0 ? "call" : "put");
-
+  unique_ptr<OptionPricer> pricer;
+  PrintData data;
+  data.params = params;
+  data.option = option;
   if (optionChoice == 0) {
     int numSteps;
     cout << "Please enter number of steps (e.g. 12 = monthly, 252 = daily): \n";
     cin >> numSteps;
-    AsianPricer pricer(params, option, numSteps);
-    cout << "The price of the Asian " << callOrPut
-         << " option: " << pricer.price() << "\n";
+    pricer = make_unique<AsianPricer>(params, option, numSteps);
+    data.hasSteps = true;
+    data.numSteps = numSteps;
   }
   if (optionChoice == 1) {
     int numSteps;
@@ -31,28 +36,30 @@ int main() {
     cin >> numSteps;
     cout << "Please enter barrier level: \n";
     cin >> barrier;
-    BarrierPricer pricer(params, option, numSteps, barrier);
-    cout << "The price of the Barrier " << callOrPut
-         << " option: " << pricer.price() << "\n";
+    pricer = make_unique<BarrierPricer>(params, option, numSteps, barrier);
+    data.hasSteps = true;
+    data.hasBarrier = true;
+    data.numSteps = numSteps;
+    data.barrier = barrier;
   }
   if (optionChoice == 2) {
-    BinaryPricer pricer(params, option);
-    cout << "The price of the Binary " << callOrPut
-         << " option: " << pricer.price() << "\n";
+    pricer = make_unique<BinaryPricer>(params, option);
   }
   if (optionChoice == 3) {
-    EuropeanPricer pricer(params, option);
-    cout << "The price of the European " << callOrPut
-         << " option: " << pricer.price() << "\n";
+    pricer = make_unique<EuropeanPricer>(params, option);
   }
   if (optionChoice == 4) {
     int numSteps;
     cout << "Please enter number of steps (e.g. 12 = monthly, 252 = daily): \n";
     cin >> numSteps;
-    LookbackPricer pricer(params, option, numSteps);
-    cout << "The price of the lookback " << callOrPut
-         << " option: " << pricer.price() << "\n";
+    pricer = make_unique<LookbackPricer>(params, option, numSteps);
+    data.hasSteps = true;
+    data.numSteps = numSteps;
   }
+
+  data.price = pricer->price();
+  data.greeks = computeGreeks(params, option);
+  printResults(data);
 
   return 0;
 }

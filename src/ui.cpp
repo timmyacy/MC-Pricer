@@ -1,6 +1,6 @@
 #include "ui.h"
+#include "model.h"
 #include <iostream>
-
 using namespace std;
 
 #include <termios.h>
@@ -24,9 +24,9 @@ MCParams enterValues(int optionChoice) {
   cin >> params.S;
   cout << "Please enter your strike price (K) \n";
   cin >> params.K;
-  cout << "Please enter your interest rate in percentage (r) \n";
+  cout << "Please enter your interest rate  (r) \n";
   cin >> params.r;
-  cout << "Please enter the volatility i.e 5%,10% (vol) \n";
+  cout << "Please enter the volatility i.e 0.05 ,0.2 etc (vol) \n";
   cin >> params.vol;
   cout << "Please enter the duration in years (6 months i.e 0.5) (T) \n";
   cin >> params.T;

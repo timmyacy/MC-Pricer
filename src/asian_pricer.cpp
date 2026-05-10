@@ -20,9 +20,9 @@ double AsianPricer::price() {
     }
     double average = path_sum / numSteps;
     if (option == CALL)
-      sum += max(average - params.K, 0.0);
+      sum += fmax(average - params.K, 0.0);
     else
-      sum += max(params.K - average, 0.0);
+      sum += fmax(params.K - average, 0.0);
   }
   return exp(-params.r * params.T) * sum / params.N;
 }
