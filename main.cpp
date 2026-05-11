@@ -8,7 +8,13 @@
 #include <iostream>
 using namespace std;
 
-int main() {
+int main(int argc, char *argv[]) {
+  bool useVarianceReduction = false;
+  for (int i = 1; i < argc; i++) {
+    if (string(argv[i]) == "--variance-reduction") {
+      useVarianceReduction = true;
+    }
+  }
   int optionChoice = selectFromMenu(
       "Select option type:", {"Asian Option", "Barrier Option", "Binary Option",
                               "European Option", "Lookback Option"});
@@ -16,11 +22,11 @@ int main() {
   MCParams params = enterValues(optionChoice);
   Option option = static_cast<Option>(choice);
 
-  string callOrPut = (choice == 0 ? "call" : "put");
   unique_ptr<OptionPricer> pricer;
   PrintData data;
   data.params = params;
   data.option = option;
+
   if (optionChoice == 0) {
     int numSteps;
     cout << "Please enter number of steps (e.g. 12 = monthly, 252 = daily): \n";
@@ -56,6 +62,16 @@ int main() {
     data.hasSteps = true;
     data.numSteps = numSteps;
   }
+
+  if (!pricer) {
+    cerr << "Invalid option type selected.\n";
+    return 1;
+  }
+
+  pricer->setVarianceReduction(useVarianceReduction);
+
+  if (useVarianceReduction)
+    cout << "Variance reduction: ON (antithetic variates)\n\n";
 
   data.price = pricer->price();
   data.greeks = computeGreeks(params, option);

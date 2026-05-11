@@ -7,8 +7,7 @@ using namespace std;
 OptionPricer::OptionPricer(const MCParams &params, Option option)
     : params(params), option(option) {}
 
-pair<double, double> OptionPricer::generateGaussianNoise(double mu,
-                                                         double sigma) {
+double OptionPricer::generateGaussianNoise(double mu, double sigma) {
   constexpr double two_pi = 2.0 * M_PI;
   static mt19937 rng(random_device{}());
   static uniform_real_distribution<> runif(0.0, 1.0);
@@ -19,6 +18,5 @@ pair<double, double> OptionPricer::generateGaussianNoise(double mu,
   u2 = runif(rng);
   auto mag = sigma * sqrt(-2.0 * log(u1));
   auto z0 = mag * cos(two_pi * u2) + mu;
-  auto z1 = mag * sin(two_pi * u2) + mu; // i could use this for var reduction
-  return make_pair(z0, z1);
+  return z0;
 }

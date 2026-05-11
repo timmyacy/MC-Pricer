@@ -13,27 +13,50 @@ double BarrierPricer::price() {
 
   for (int i = 0; i < params.N; i++) {
     double s_current = params.S;
+    double s_antithetic = params.S;
     bool knocked_out = false;
+    bool knocked_out_anti = false;
+
     for (int step = 0; step < numSteps; step++) {
-      auto [z0, z1] = generateGaussianNoise(0.0, 1.0);
+      double z = generateGaussianNoise(0.0, 1.0);
+
       s_current =
           s_current * exp((params.r - 0.5 * params.vol * params.vol) * dt +
-                          params.vol * sqrt(dt) * z0);
-      if (option == CALL && s_current >= barrier) {
-        knocked_out = true;
-        break;
+                          params.vol * sqrt(dt) * z);
+
+      s_antithetic =
+          s_antithetic * exp((params.r - 0.5 * params.vol * params.vol) * dt +
+                             params.vol * sqrt(dt) * (-z));
+
+      if (option == CALL) {
+        if (s_current >= barrier)
+          knocked_out = true;
+        if (s_antithetic >= barrier)
+          knocked_out_anti = true;
+      } else {
+        if (s_current <= barrier)
+          knocked_out = true;
+        if (s_antithetic <= barrier)
+          knocked_out_anti = true;
       }
-      if (option == PUT && s_current <= barrier) {
-        knocked_out = true;
+
+      // only break if both knocked out otherwise one path still live
+      if (knocked_out && knocked_out_anti)
         break;
-      }
     }
+
+    double payoff = 0.0, payoff_anti = 0.0;
+
     if (!knocked_out) {
-      if (option == CALL)
-        sum += max(s_current - params.K, 0.0);
-      else
-        sum += max(params.K - s_current, 0.0);
+      payoff = option == CALL ? max(s_current - params.K, 0.0)
+                              : max(params.K - s_current, 0.0);
     }
+    if (!knocked_out_anti) {
+      payoff_anti = option == CALL ? max(s_antithetic - params.K, 0.0)
+                                   : max(params.K - s_antithetic, 0.0);
+    }
+
+    sum += useVarianceReduction ? 0.5 * (payoff + payoff_anti) : payoff;
   }
 
   return exp(-params.r * params.T) * sum / params.N;
