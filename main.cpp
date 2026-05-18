@@ -4,8 +4,8 @@
 #include "european_pricer.h"
 #include "lookback_pricer.h"
 #include "ui.h"
-
 #include <iostream>
+#include <memory>
 using namespace std;
 
 int main(int argc, char *argv[]) {
