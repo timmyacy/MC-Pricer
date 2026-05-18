@@ -6,13 +6,11 @@ public:
   virtual double price() = 0;
   virtual ~OptionPricer() = default;
 
-  void setVarianceReduction(bool enabled) { // ← setter lives here
-    useVarianceReduction = enabled;
-  }
+  void setVarianceReduction(bool enabled) { useVarianceReduction = enabled; }
 
 protected:
   MCParams params;
   Option option;
-  bool useVarianceReduction = false; // ← member lives here
+  bool useVarianceReduction = false;
   double generateGaussianNoise(double mu, double sigma);
 };

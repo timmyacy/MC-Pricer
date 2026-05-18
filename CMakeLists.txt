@@ -21,3 +21,5 @@ add_executable(main
 
 
 target_include_directories(main PRIVATE include)
+add_executable(tests_bin tests/mc_pricer.cpp)
+target_include_directories(tests_bin PRIVATE include)
