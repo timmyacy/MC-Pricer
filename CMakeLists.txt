@@ -21,5 +21,8 @@ add_executable(main
 
 
 target_include_directories(main PRIVATE include)
-add_executable(tests_bin tests/mc_pricer.cpp)
-target_include_directories(tests_bin PRIVATE include)
+enable_testing()
+add_executable(mc_pricer tests/mc_pricer.cpp)
+target_include_directories(mc_pricer PRIVATE include)
+
+add_test(NAME mc_pricer COMMAND mc_pricer)
